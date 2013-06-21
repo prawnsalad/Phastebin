@@ -1,0 +1,79 @@
+<html>
+
+	<head>
+
+		<title>hastebin</title>
+
+		<link rel="stylesheet" type="text/css" href="solarized_dark.css"/>
+		<link rel="stylesheet" type="text/css" href="application.css"/>
+
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="highlight.min.js"></script>
+		<script type="text/javascript" src="application.min.js"></script>
+
+		<meta name="robots" content="noindex,nofollow"/>
+
+		<script type="text/javascript">
+			var app = null;
+			// Handle pops
+			var handlePop = function(evt) {
+				var path = evt.target.location.pathname;
+				if (path === '/') { app.newDocument(true); }
+				else { app.loadDocument(path.substring(1, path.length)); }
+			};
+			// Set up the pop state to handle loads, skipping the first load
+			// to make chrome behave like others:
+			// http://code.google.com/p/chromium/issues/detail?id=63040
+			setTimeout(function() {
+				window.onpopstate = function(evt) {
+					try { handlePop(evt); } catch(err) { /* not loaded yet */ }
+				};
+			}, 1000);
+			// Construct app and load initial path
+			$(function() {
+				app = new haste('hastebin', { twitter: true });
+				handlePop({ target: window });
+			});
+		</script>
+
+	</head>
+
+	<body>
+		<ul id="messages"></ul>
+
+		<div id="key">
+		  <div id="pointer" style="display:none;"></div>
+			<div id="box1">
+				<a href="/about.md" class="logo"></a>
+			</div>
+			<div id="box2">
+				<div class="save function"></div>
+				<div class="new function"></div>
+				<div class="duplicate function"></div>
+				<div class="raw function"></div>
+				<div class="twitter function"></div>
+			</div>
+			<div id="box3" style="display:none;">
+				<div class="label"></div>
+				<div class="shortcut"></div>
+			</div>
+		</div>
+
+		<div id="linenos"></div>
+		<pre id="box" style="display:none;" tabindex="0"><code></code></pre>
+		<textarea spellcheck="false" style="display:none;"></textarea>
+
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-27329119-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+
+	</body>
+
+</html>
