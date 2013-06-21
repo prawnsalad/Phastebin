@@ -3,7 +3,8 @@
 	namespace Phastebin\Stores;
 
 	class File {
-		private $base_path = './data/';
+		// Directory to store the content files (relative to public folder)
+		private $base_path = '../data/';
 
 		public function set($content='') {
 			$key = $this->generateKey();
