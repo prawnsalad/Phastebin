@@ -19,7 +19,7 @@
 			 * Reading a raw document
 			 */
 			$app->get('/raw/:key', function($key) use ($app) {
-				$store = new Stores\File();
+				$store = $this->getStoreInstance();
 				$document_content = $store->get($key);
 
 				$res = $app->response();
@@ -44,7 +44,7 @@
 			 * Reading a document + meta data
 			 */
 			$app->get('/documents/:key', function($key) use ($app) {
-				$store = new Stores\File();
+				$store = $this->getStoreInstance();
 				$document_content = $store->get($key);
 
 				$res = $app->response();
@@ -72,10 +72,10 @@
 			 * Saving documents
 			 */
 			$app->post('/documents', function() use ($app) {
-				$key_gen = new KeyGenerators\Phonetic();
+				$key_gen = $this->getkeyGenInstance();
 				$key = $key_gen->createKey();
 
-				$store = new Stores\File();
+				$store = $this->getStoreInstance();
 				$doc_saved = $store->set($key, $app->request()->getBody());
 
 				$res = $app->response();
@@ -102,5 +102,24 @@
 			$app->get('/(:id)', function() use ($app) {
 				readfile('index.html');
 			});
+		}
+
+
+
+		private function getStoreInstance($type=null) {
+			if (!$type)
+				$type = $this->app->config('store_type');
+
+			$store_class = '\\Phastebin\\Stores\\' . $type;
+			return new $store_class();
+		}
+
+
+		private function getkeyGenInstance($type=null) {
+			if (!$type)
+				$type = $this->app->config('keygen_type');
+
+			$store_class = '\\Phastebin\\KeyGenerators\\' . $type;
+			return new $store_class();
 		}
 	}
