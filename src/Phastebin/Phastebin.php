@@ -72,13 +72,16 @@
 			 * Saving documents
 			 */
 			$app->post('/documents', function() use ($app) {
+				$key_gen = new KeyGenerators\Phonetic();
+				$key = $key_gen->createKey();
+
 				$store = new Stores\File();
-				$saved_key = $store->set($app->request()->getBody());
+				$doc_saved = $store->set($key, $app->request()->getBody());
 
 				$res = $app->response();
 				$res['Content-Type'] = 'application/json';
 
-				if (!$saved_key) {
+				if (!$doc_saved) {
 					$res->body(json_encode(array(
 						'message' => 'Error adding document.'
 					)));
@@ -88,7 +91,7 @@
 				}
 
 				$res->body(json_encode(array(
-					'key' => $saved_key
+					'key' => $key
 				)));
 			});
 
