@@ -1,6 +1,7 @@
 {
     "require": {
-        "slim/slim": "2.*"
+        "slim/slim": "2.*",
+        "predis/predis": "0.8.*"
     },
 
     "autoload": {

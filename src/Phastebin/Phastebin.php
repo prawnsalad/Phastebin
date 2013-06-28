@@ -110,8 +110,9 @@
 			if (!$type)
 				$type = $this->app->config('store_type');
 
-			$store_class = '\\Phastebin\\Stores\\' . $type;
-			return new $store_class();
+			$store_class = '\\Phastebin\\Stores\\' . ucfirst($type);
+			$store_config = 'store_' . strtolower($type) . '_config';
+			return new $store_class($this->app->config($store_config));
 		}
 
 
@@ -119,7 +120,7 @@
 			if (!$type)
 				$type = $this->app->config('keygen_type');
 
-			$store_class = '\\Phastebin\\KeyGenerators\\' . $type;
+			$store_class = '\\Phastebin\\KeyGenerators\\' . ucfirst($type);
 			return new $store_class();
 		}
 	}
