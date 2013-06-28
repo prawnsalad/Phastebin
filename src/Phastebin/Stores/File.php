@@ -6,6 +6,13 @@
 		// Directory to store the content files (relative to public folder)
 		private $base_path = '../data/';
 
+		public function __construct($config) {
+			if ($config && $config['storage_dir']) {
+				$this->base_path = $config['storage_dir'];
+			}
+		}
+
+
 		public function set($key, $content) {
 			$filename = $this->base_path . $this->generateFilename($key);
 
