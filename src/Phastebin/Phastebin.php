@@ -13,13 +13,14 @@
 
 
 		private function addRoutes() {
+			$self = $this;
 			$app = $this->app;
 
 			/**
 			 * Reading a raw document
 			 */
-			$app->get('/raw/:key', function($key) use ($app) {
-				$store = $this->getStoreInstance();
+			$app->get('/raw/:key', function($key) use ($app, $self) {
+				$store = $self->getStoreInstance();
 				$document_content = $store->get($key);
 
 				$res = $app->response();
@@ -43,8 +44,8 @@
 			/**
 			 * Reading a document + meta data
 			 */
-			$app->get('/documents/:key', function($key) use ($app) {
-				$store = $this->getStoreInstance();
+			$app->get('/documents/:key', function($key) use ($app, $self) {
+				$store = $self->getStoreInstance();
 				$document_content = $store->get($key);
 
 				$res = $app->response();
@@ -71,11 +72,11 @@
 			/**
 			 * Saving documents
 			 */
-			$app->post('/documents', function() use ($app) {
-				$key_gen = $this->getkeyGenInstance();
+			$app->post('/documents', function() use ($app, $self) {
+				$key_gen = $self->getkeyGenInstance();
 				$key = $key_gen->createKey();
 
-				$store = $this->getStoreInstance();
+				$store = $self->getStoreInstance();
 				$doc_saved = $store->set($key, $app->request()->getBody());
 
 				$res = $app->response();
@@ -99,14 +100,14 @@
 			/**
 			 * Serving up the index page
 			 */
-			$app->get('/(:id)', function() use ($app) {
+			$app->get('/(:id)', function() use ($app, $self) {
 				readfile('index.html');
 			});
 		}
 
 
 
-		private function getStoreInstance($type=null) {
+		public function getStoreInstance($type=null) {
 			if (!$type)
 				$type = $this->app->config('store_type');
 
@@ -116,7 +117,7 @@
 		}
 
 
-		private function getkeyGenInstance($type=null) {
+		public function getkeyGenInstance($type=null) {
 			if (!$type)
 				$type = $this->app->config('keygen_type');
 
